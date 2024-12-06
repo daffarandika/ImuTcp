@@ -16,5 +16,5 @@ val appModule = module {
     single { Accelerometer(context = androidContext()) }.bind<Accelerometer>()
     viewModel { ImuViewModel(get(), get()) }
     viewModel { TcpViewModel(TcpClient()) }
-//    viewModel { ImuTcpMediatorViewModel(get(), get()) }
+    viewModel { ImuTcpMediatorViewModel(get(), get()) }
 }

@@ -1,5 +1,6 @@
 package org.blakasutha.imu_tcp.feature_tcp.data
 
+import android.util.Log
 import io.ktor.network.selector.SelectorManager
 import io.ktor.network.sockets.Socket
 import io.ktor.network.sockets.aSocket
@@ -42,13 +43,12 @@ class TcpClient(
         if (socket == null || sendChannel == null ) {
             return Result.Error(NetworkError.INVALID_CONNECTION)
         }
-        return withContext(dispatcher) {
-            try {
-                sendChannel!!.writeStringUtf8(data)
-                return@withContext Result.Success(Unit)
-            } catch (e: Exception) {
-                return@withContext Result.Error(NetworkError.SERIALIZATION)
-            }
+        try {
+            sendChannel!!.writeStringUtf8(data)
+            sendChannel!!.flush()
+            return Result.Success(Unit)
+        } catch (e: Exception) {
+            return Result.Error(NetworkError.SERIALIZATION)
         }
     }
 

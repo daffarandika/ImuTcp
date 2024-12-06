@@ -1,6 +1,7 @@
 package org.blakasutha.imu_tcp
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,13 +28,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             IMUTCPTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val imuViewModel = getViewModel<ImuViewModel>()
-                    val imuState by imuViewModel.state.collectAsStateWithLifecycle()
-                    val tcpViewModel = getViewModel<TcpViewModel>()
-                    val tcpState by tcpViewModel.state.collectAsStateWithLifecycle()
+                    val mediatorViewModel = getViewModel<ImuTcpMediatorViewModel>()
+                    val imuState by mediatorViewModel.imuState.collectAsState()
+                    val tcpState by mediatorViewModel.tcpState.collectAsState()
                     val context = LocalContext.current
-//                    val mediatorViewModel = getViewModel<ImuTcpMediatorViewModel>()
-                    ObserveEvent(events = tcpViewModel.event) { event ->
+                    ObserveEvent(events = mediatorViewModel.tcpEvent) { event ->
                         when (event) {
                             is TcpEvent.ShowToast -> {
                                 Toast.makeText(context, event.text, Toast.LENGTH_SHORT).show()
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                         tcpState = tcpState,
                         imuState = imuState,
                         modifier = Modifier.padding(innerPadding),
-                        onAction = { tcpViewModel.onAction(it) }
+                        onAction = { mediatorViewModel.onAction(it) }
                     )
                 }
             }

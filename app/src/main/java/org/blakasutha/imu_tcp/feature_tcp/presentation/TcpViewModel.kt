@@ -41,17 +41,15 @@ class TcpViewModel(
         }
     }
 
-    fun sendData(data: String) {
-        viewModelScope.launch {
-            tcpClient.send(data)
-                .onSuccess {
-                    Log.d(TAG, "sendData: success")
+    suspend fun sendData(data: String) {
+        tcpClient.send(data)
+            .onSuccess {
+                Log.d(TAG, "sendData: success")
 //                    _event.send(TcpEvent.ShowToast("Successfully sent"))
-                }.onError {
-                    Log.d(TAG, "sendData: error")
+            }.onError {
+                Log.d(TAG, "sendData: error")
 //                    _event.send(TcpEvent.ShowToast("Error when sending"))
-                }
-        }
+            }
     }
 
     fun onAction(action: TcpAction) {
@@ -95,6 +93,13 @@ class TcpViewModel(
     private fun setForthOctet(text: String) {
         _state.update {
             it.copy(forthOctet = text)
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.launch {
+            tcpClient.disconnect()
         }
     }
 
