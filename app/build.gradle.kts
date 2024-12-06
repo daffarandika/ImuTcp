@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.secrets.gradle.plugin)
+    alias(libs.plugins.kotlin.serialization.plugin)
 }
 
 android {
@@ -64,6 +65,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.bundles.koin)
     implementation(libs.bundles.ktor)
+    implementation(libs.bundles.serialization)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

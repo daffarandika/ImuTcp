@@ -1,5 +1,8 @@
 package org.blakasutha.imu_tcp.feature_imu.presentation
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ImuState(
     val gyroX: Float = 0f,
     val gyroY: Float = 0f,

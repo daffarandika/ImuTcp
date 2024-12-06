@@ -7,6 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.blakasutha.imu_tcp.feature_imu.presentation.ImuViewModel
 import org.blakasutha.imu_tcp.feature_tcp.presentation.TcpAction
 import org.blakasutha.imu_tcp.feature_tcp.presentation.TcpViewModel
@@ -29,9 +31,10 @@ class ImuTcpMediatorViewModel(
         viewModelScope.launch (Dispatchers.IO) {
             imuState
                 .sample(100L)
-                .collect { data ->
-                    Log.d("MediatorViewModel", "sending from mediator: $data")
-                    tcpViewModel.sendData(data.toString())
+                .collect { imuState ->
+                    Log.d("MediatorViewModel", "sending from mediator: $imuState")
+                    tcpViewModel.sendData(Json.encodeToString(imuState))
+//                    tcpViewModel.sendData(imuState.toString())
                 }
         }
     }
