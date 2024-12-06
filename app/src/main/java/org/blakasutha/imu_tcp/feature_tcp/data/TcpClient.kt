@@ -24,15 +24,17 @@ class TcpClient(
     private var sendChannel: ByteWriteChannel? = null
     private var receiveChannel: ByteReadChannel? = null
 
-    override suspend fun connect(host: String, port: Int): Result<Unit, NetworkError> {
-        try {
-            selectorManager = SelectorManager(dispatcher)
-            socket = aSocket(selectorManager!!).tcp().connect(host, port)
-            sendChannel = socket!!.openWriteChannel()
-            receiveChannel = socket!!.openReadChannel()
-            return Result.Success(Unit)
-        } catch (e: Exception) {
-            return Result.Error(NetworkError.INVALID_CONNECTION)
+    override suspend fun connect(host: String, port: String): Result<Unit, NetworkError> {
+        return withContext(dispatcher){
+            try {
+                selectorManager = SelectorManager(dispatcher)
+                socket = aSocket(selectorManager!!).tcp().connect(host, port.toInt())
+                sendChannel = socket!!.openWriteChannel()
+                receiveChannel = socket!!.openReadChannel()
+                return@withContext Result.Success(Unit)
+            } catch (e: Exception) {
+                return@withContext Result.Error(NetworkError.INVALID_CONNECTION)
+            }
         }
     }
 
@@ -40,11 +42,13 @@ class TcpClient(
         if (socket == null || sendChannel == null ) {
             return Result.Error(NetworkError.INVALID_CONNECTION)
         }
-        try {
-            sendChannel!!.writeStringUtf8(data)
-            return Result.Success(Unit)
-        } catch (e: Exception) {
-            return Result.Error(NetworkError.SERIALIZATION)
+        return withContext(dispatcher) {
+            try {
+                sendChannel!!.writeStringUtf8(data)
+                return@withContext Result.Success(Unit)
+            } catch (e: Exception) {
+                return@withContext Result.Error(NetworkError.SERIALIZATION)
+            }
         }
     }
 
@@ -52,11 +56,13 @@ class TcpClient(
         if (socket == null || receiveChannel == null ) {
             return Result.Error(NetworkError.INVALID_CONNECTION)
         }
-        try {
-            val data = receiveChannel!!.readUTF8Line() ?: return Result.Error(NetworkError.CONNECTION_CLOSED)
-            return Result.Success(data)
-        } catch (e: Exception) {
-            return Result.Error(NetworkError.SERIALIZATION)
+        return withContext(dispatcher) {
+            try {
+                val data = receiveChannel!!.readUTF8Line() ?: return@withContext Result.Error(NetworkError.CONNECTION_CLOSED)
+                return@withContext Result.Success(data)
+            } catch (e: Exception) {
+                return@withContext Result.Error(NetworkError.SERIALIZATION)
+            }
         }
     }
 
@@ -64,14 +70,14 @@ class TcpClient(
         if (socket == null || receiveChannel == null || sendChannel == null) {
             return Result.Error(NetworkError.INVALID_CONNECTION)
         }
-        try {
-            withContext(dispatcher) {
+        return withContext(dispatcher){
+            try {
                 socket!!.close()
                 selectorManager!!.close()
+                return@withContext Result.Success(Unit)
+            } catch (e: Exception) {
+                return@withContext Result.Error(NetworkError.INVALID_CONNECTION)
             }
-            return Result.Success(Unit)
-        } catch (e: Exception) {
-            return Result.Error(NetworkError.INVALID_CONNECTION)
         }
     }
 }

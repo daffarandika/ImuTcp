@@ -1,4 +1,4 @@
-package org.blakasutha.imu_tcp.core.component
+package org.blakasutha.imu_tcp.core.presentation.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

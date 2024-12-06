@@ -3,7 +3,6 @@ package org.blakasutha.imu_tcp.feature_tcp.presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,7 +28,7 @@ import org.blakasutha.imu_tcp.ui.theme.IMUTCPTheme
 fun TcpDisplay(
     state: TcpState,
     modifier: Modifier = Modifier,
-    onAction: (TcpAction) -> Unit
+    onAction: (TcpAction) -> Unit,
 ){
     Column(
         modifier = modifier
