@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.blakasutha.imu_tcp.ui.theme.IMUTCPTheme
+import org.blakasutha.imu_tcp.ui.theme.ImuTcpTheme
 
 @Composable
 fun TcpDisplay(
@@ -109,7 +109,7 @@ fun TcpDisplay(
                 text = ":"
             )
             OutlinedTextField(
-                value = "1234",
+                value = state.port,
                 onValueChange = {},
                 modifier = Modifier.width(76.dp),
                 enabled = !state.isConnected,
@@ -124,7 +124,7 @@ fun TcpDisplay(
         }
         Spacer(modifier = Modifier.size(8.dp))
         Button(
-            onClick = {},
+            onClick = {onAction(TcpAction.OnButtonClick)},
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -145,7 +145,7 @@ fun TcpDisplay(
 @Preview
 @Composable
 private fun TcpDisplayPrev() {
-    IMUTCPTheme {
+    ImuTcpTheme {
         TcpDisplay(
             state = TcpState(),
             modifier = Modifier.background(Color.White),

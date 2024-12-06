@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.blakasutha.imu_tcp.BuildConfig
 import org.blakasutha.imu_tcp.core.data.onError
 import org.blakasutha.imu_tcp.core.data.onSuccess
 import org.blakasutha.imu_tcp.feature_tcp.data.TcpClient
@@ -26,30 +25,41 @@ class TcpViewModel(
     private val _event = Channel<TcpEvent>()
     val event = _event.receiveAsFlow()
 
-    init {
+    private fun connect() {
         viewModelScope.launch {
-
+            val host = _state.value.getIp()
+            val port = _state.value.port
             tcpClient.connect(
-                host = BuildConfig.networkHost,
-                port = BuildConfig.networkPort,
+                host = host,
+                port = port,
             ).onSuccess {
                 _event.send(TcpEvent.ShowToast("Successfully connected"))
             }.onError {
                 _event.send(TcpEvent.ShowToast("Error when connecting"))
             }
-
         }
     }
 
-    suspend fun sendData(data: String) {
-        tcpClient.send(data)
-            .onSuccess {
-                Log.d(TAG, "sendData: success")
-//                    _event.send(TcpEvent.ShowToast("Successfully sent"))
-            }.onError {
-                Log.d(TAG, "sendData: error")
-//                    _event.send(TcpEvent.ShowToast("Error when sending"))
-            }
+    private fun disconnect() {
+        viewModelScope.launch {
+            tcpClient.disconnect()
+                .onSuccess {
+                    _event.send(TcpEvent.ShowToast("Successfully disconnected"))
+                }.onError {
+                    _event.send(TcpEvent.ShowToast("Error when disconnecting"))
+                }
+        }
+    }
+
+    fun sendData(data: String) {
+        viewModelScope.launch {
+            tcpClient.send(data)
+                .onSuccess {
+                    Log.d(TAG, "sendData: success")
+                }.onError {
+                    Log.d(TAG, "sendData: error")
+                }
+        }
     }
 
     fun onAction(action: TcpAction) {
@@ -67,7 +77,17 @@ class TcpViewModel(
                 setForthOctet(action.text)
             }
             is TcpAction.OnButtonClick -> {
-
+                if (_state.value.isConnected) {
+                    disconnect()
+                    _state.update {
+                        it.copy(isConnected = false)
+                    }
+                } else {
+                    connect()
+                    _state.update {
+                        it.copy(isConnected = true)
+                    }
+                }
             }
         }
     }

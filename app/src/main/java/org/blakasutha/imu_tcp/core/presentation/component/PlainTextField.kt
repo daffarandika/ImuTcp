@@ -6,15 +6,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.blakasutha.imu_tcp.ui.theme.IMUTCPTheme
+import org.blakasutha.imu_tcp.ui.theme.ImuTcpTheme
 
 @Composable
 fun PlainTextField(
@@ -40,7 +37,7 @@ fun PlainTextField(
 @Preview
 @Composable
 private fun PlainTextFieldPrev() {
-    IMUTCPTheme {
+    ImuTcpTheme {
         PlainTextField(value = "hai", onValueChange = {})
     }
 }

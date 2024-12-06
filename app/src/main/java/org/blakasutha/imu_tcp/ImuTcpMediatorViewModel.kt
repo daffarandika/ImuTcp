@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import org.blakasutha.imu_tcp.feature_imu.presentation.ImuViewModel
@@ -14,9 +13,10 @@ import org.blakasutha.imu_tcp.feature_tcp.presentation.TcpViewModel
 
 @OptIn(FlowPreview::class)
 class ImuTcpMediatorViewModel(
-    private val imuViewModel: ImuViewModel,
+    imuViewModel: ImuViewModel,
     private val tcpViewModel: TcpViewModel
 ): ViewModel() {
+
     val imuState = imuViewModel.state
     val tcpState = tcpViewModel.state
     val tcpEvent = tcpViewModel.event
@@ -30,7 +30,7 @@ class ImuTcpMediatorViewModel(
             imuState
                 .sample(100L)
                 .collect { data ->
-                    Log.d("MVM", "sending from mediator: $data")
+                    Log.d("MediatorViewModel", "sending from mediator: $data")
                     tcpViewModel.sendData(data.toString())
                 }
         }

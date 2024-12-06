@@ -14,7 +14,7 @@ import org.blakasutha.imu_tcp.feature_imu.presentation.ImuState
 import org.blakasutha.imu_tcp.feature_tcp.presentation.TcpAction
 import org.blakasutha.imu_tcp.feature_tcp.presentation.TcpDisplay
 import org.blakasutha.imu_tcp.feature_tcp.presentation.TcpState
-import org.blakasutha.imu_tcp.ui.theme.IMUTCPTheme
+import org.blakasutha.imu_tcp.ui.theme.ImuTcpTheme
 
 @Composable
 fun ImuTcpScreen(
@@ -39,7 +39,7 @@ fun ImuTcpScreen(
 @Preview
 @Composable
 private fun AppScreenPrev() {
-    IMUTCPTheme {
+    ImuTcpTheme {
         ImuTcpScreen(
             tcpState = TcpState(),
             imuState = ImuState(),
