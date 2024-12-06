@@ -21,13 +21,12 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 @Composable
-fun ImuScreen(
+fun ImuDisplay(
     state: ImuState,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize()
             .padding(16.dp)
         ,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -35,38 +34,37 @@ fun ImuScreen(
     ) {
         Text(
             text = "Gyroscope",
-            fontSize = 48.sp,
+            fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
         Text(
             text = "x: ${state.gyroX.format()}",
-            fontSize = 36.sp
+            fontSize = 18.sp
         )
         Text(
             text = "y: ${state.gyroY.format()}",
-            fontSize = 36.sp
+            fontSize = 18.sp
         )
         Text(
             text = "z: ${state.gyroZ.format()}",
-            fontSize = 36.sp
+            fontSize = 18.sp
         )
-        Spacer(modifier = Modifier.size(8.dp))
         Text(
             text = "Accelerometer",
-            fontSize = 48.sp,
+            fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
         Text(
             text = "x: ${state.accelX.format()}",
-            fontSize = 36.sp
+            fontSize = 18.sp
         )
         Text(
             text = "y: ${state.accelY.format()}",
-            fontSize = 36.sp
+            fontSize = 18.sp
         )
         Text(
             text = "z: ${state.accelZ.format()}",
-            fontSize = 36.sp
+            fontSize = 18.sp
         )
     }
 }
@@ -75,7 +73,7 @@ fun ImuScreen(
 @Composable
 private fun GyroscopeScreenPrev() {
     IMUTCPTheme {
-        ImuScreen(
+        ImuDisplay(
             state = ImuState(0.21414f, 2414f, -0.24132f),
             modifier = Modifier.background(Color.White)
         )
