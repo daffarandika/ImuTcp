@@ -40,9 +40,9 @@ class ImuViewModel(
     private fun handleRotationVector(values: List<Float>) {
         _state.update {
             it.copy(
-                rotationX = values[0],
-                rotationY = values[1],
-                rotationZ = values[2],
+                rotationX = values[0].radToDeg(),
+                rotationY = values[1].radToDeg(),
+                rotationZ = values[2].radToDeg(),
             )
         }
     }
