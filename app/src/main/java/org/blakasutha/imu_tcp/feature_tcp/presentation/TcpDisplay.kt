@@ -94,7 +94,7 @@ fun TcpDisplay(
             OutlinedTextField(
                 value = state.forthOctet,
                 onValueChange = {
-                    onAction(TcpAction.OnThirdOctetChange(it))
+                    onAction(TcpAction.OnForthOctetChange(it))
                 },
                 modifier = Modifier.width(61.dp),
                 enabled = !state.isConnected,

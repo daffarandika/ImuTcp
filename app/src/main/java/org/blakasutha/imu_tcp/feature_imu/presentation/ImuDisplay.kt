@@ -63,6 +63,23 @@ fun ImuDisplay(
             text = "z: ${state.accelZ.format()}",
             fontSize = 18.sp
         )
+        Text(
+            text = "Rotation",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = "x: ${state.rotationX.format()}",
+            fontSize = 18.sp
+        )
+        Text(
+            text = "y: ${state.rotationY.format()}",
+            fontSize = 18.sp
+        )
+        Text(
+            text = "z: ${state.rotationZ.format()}",
+            fontSize = 18.sp
+        )
     }
 }
 
